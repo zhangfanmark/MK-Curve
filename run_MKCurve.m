@@ -45,6 +45,13 @@ if  ~isempty(strfind(sub_output_folder, 'Shanghai'))
 elseif  ~isempty(strfind(sub_output_folder, 'HCP'))
     syn_b0_range = 50:100:10000;
     slice_id = 3;
+else
+    b0 = dwi(:, :, :, 1);
+    mean_b0 = mean(b0(mask));
+    up_lim = mean_b0 * 2;
+    down_lim = 50;
+    syn_b0_range = down_lim:200:up_lim;
+    slice_id = 1;
 end
 
 mk_vs_syn_b0 = MK_versus_synthetic_b0(dwi, grad, mask, syn_b0_range, output_dir);
@@ -93,7 +100,7 @@ end
 if flag_plot == 1
     orig_parameter = load(original_parameter_file);
     plot_idx = 1;
-    figure;
+    figure('units','normalized','outerposition',[0 0 1 1])
     for th = th_range
         output_th_dir = fullfile(output_dir, ['threshold_', num2str(th, '%0.2f')]);
         fixed_parameters = load(fullfile(output_th_dir, 'fixed_parameters'));
@@ -109,15 +116,10 @@ if flag_plot == 1
         imshow(img, [0, 1.5]);
         hold on;
         spy([zeros(size(mk_orig_slice)), abnormal_mk_slice, zeros(size(mk_orig_slice))], 'r', 3);
-        title(['Threshold ', num2str(th), ', implausible #: ', num2str(nansum(abnormal_mk_slice(:)))])
+        title(['Threshold = ', num2str(th), ', implausible #: ', num2str(nansum(abnormal_mk_slice(:)))])
+        set(gca, 'FontSize', 25);
     end 
-    set(gcf, 'Position', [300, 600, 1000, 200*length(th_range)/2]);
+   
     export_fig(gcf, fullfile(output_dir, ['MK-Curve_results.png']), '-transparent') 
 end
-
-
-
-
-
-
 
