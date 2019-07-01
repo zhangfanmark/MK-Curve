@@ -43,7 +43,7 @@ if  ~isempty(strfind(sub_output_folder, 'Shanghai'))
     syn_b0_range = 2:2:1500;
     slice_id = 40;
 elseif  ~isempty(strfind(sub_output_folder, 'HCP'))
-    syn_b0_range = 50:50:10000;
+    syn_b0_range = 50:100:10000;
     slice_id = 3;
 end
 
@@ -108,7 +108,7 @@ if flag_plot == 1
         plot_idx = plot_idx + 1;
         imshow(img, [0, 1.5]);
         hold on;
-        spy([zeros(size(mk_orig_slice)), abnormal_mk_slice, zeros(size(mk_orig_slice))], 'r', 5);
+        spy([zeros(size(mk_orig_slice)), abnormal_mk_slice, zeros(size(mk_orig_slice))], 'r', 3);
         title(['Threshold ', num2str(th), ', implausible #: ', num2str(nansum(abnormal_mk_slice(:)))])
     end 
     set(gcf, 'Position', [300, 600, 1000, 200*length(th_range)/2]);
