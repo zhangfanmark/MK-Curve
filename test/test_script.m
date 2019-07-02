@@ -14,17 +14,18 @@ if ~exist(sub_output_folder, 'dir')
 end
 
 % input files
-input_data_file = '/Users/fan/Desktop/RepImpact/data/Belgium_B1_02_dMRI_TOPUP_S15_MB2_FP.nii.gz';
-input_bval_file = '/Users/fan/Desktop/RepImpact/data/Belgium_B1_02_dMRI_TOPUP_S15_MB2_FP.bval';
-input_bvec_file = '/Users/fan/Desktop/RepImpact/data/Belgium_B1_02_dMRI_TOPUP_S15_MB2_FP.eddy_rotated_bvecs';
-input_mask_file = '/Users/fan/Desktop/RepImpact/data/Belgium_B1_02_dMRI_TOPUP_S15_MB2_FP_brain_mask.nii.gz';
+input_data_file = '/Users/fan/Desktop/RepImpact/Belgium_B1_02_dMRI_TOPUP_S15_MB2_FP.nii.gz';
+input_bval_file = '/Users/fan/Desktop/RepImpact/Belgium_B1_02_dMRI_TOPUP_S15_MB2_FP.bval';
+input_bvec_file = '/Users/fan/Desktop/RepImpact/Belgium_B1_02_dMRI_TOPUP_S15_MB2_FP.eddy_rotated_bvecs';
+input_mask_file = '/Users/fan/Desktop/RepImpact/Belgium_B1_02_dMRI_TOPUP_S15_MB2_FP_brain_mask.nii.gz';
 
 % extract over or equal 1000
 highB_data_file = fullfile(sub_output_folder, 'data_highB.nii.gz');
 highB_bval_file = fullfile(sub_output_folder, 'bval_highB.val');
 highB_bvec_file = fullfile(sub_output_folder, 'bvec_highB.vec');
 
-extract_DWI_shells(input_data_file, input_bval_file, input_bvec_file, highB_data_file, highB_bval_file, highB_bvec_file);
+removed_bvals = [5:500];
+extract_DWI_shells(input_data_file, input_bval_file, input_bvec_file, removed_bvals, highB_data_file, highB_bval_file, highB_bvec_file);
 
 % downsample data
 ds_data_file = fullfile(sub_output_folder, 'data_highB_ds.nii.gz');
