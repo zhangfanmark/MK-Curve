@@ -45,13 +45,16 @@ if  ~isempty(strfind(sub_output_folder, 'Shanghai'))
 elseif  ~isempty(strfind(sub_output_folder, 'HCP'))
     syn_b0_range = 50:100:10000;
     slice_id = 3;
+elseif ~isempty(strfind(sub_output_folder, 'RepImpact'))
+    syn_b0_range = 50:50:10000;
+    slice_id = 40;
 else
     b0 = dwi(:, :, :, 1);
     mean_b0 = mean(b0(mask));
     up_lim = mean_b0 * 2;
     down_lim = 50;
     syn_b0_range = down_lim:200:up_lim;
-    slice_id = 1;
+    slice_id = round(size(mask, 3)/2);
 end
 
 mk_vs_syn_b0 = MK_versus_synthetic_b0(dwi, grad, mask, syn_b0_range, output_dir);
