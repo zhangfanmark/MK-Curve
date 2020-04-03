@@ -1,11 +1,11 @@
 function hpc_submit_job(function_name, varargin)
 %% This code is used to submit a FW job to the high performance cluster (hpc).
 % To run this, replace:
-%   FreeWater_OneCase(case_id, input_dwi, input_bval, input_bvec, input_mask, output_folder);
+%   run_MKCurve(nii_file, bval_file, bvec_file, mask_file, sub_output_folder, 0);
 % with:
-%   hpc_submit_job('FreeWater_OneCase', case_id, input_dwi, input_bval, input_bvec, input_mask, output_folder);
+%   hpc_submit_job('run_MKCurve', nii_file, bval_file, bvec_file, mask_file, sub_output_folder, 0);
 %
-% This code call 'bsub' to submit FreeWater_OneCase to the cluster.
+% This code call 'bsub' to submit run_MKCurve to the cluster.
 % Parameters can be modified for 'bsub' by changing the paramter options of the variable cmd in line 35. 
 % For example, one can specify a machine to run the job by adding '-m cmuXX'. 
 
