@@ -1,5 +1,20 @@
 function run_MKCurve(nii_file, bval_file, bvec_file, mask_file, sub_output_folder, flag_plot)
 
+%run_MKCurve Run MK-Curve for one case. 
+%
+% See `test` folder for an example .
+% 
+% This implementation is based on the following paper. Please refer to the
+% paper for method details, and cite the paper if you use this code in your work.
+%
+% - Zhang, Fan, Lipeng Ning, Lauren J. O'Donnell, and Ofer Pasternak. 
+%       "MK-curve-Characterizing the relation between mean kurtosis and alterations in the diffusion MRI signal." 
+%        NeuroImage 196 (2019): 68-80.
+%
+% Date: June, 2019
+% Authors: Fan Zhang (fzhang@bwh.harvard.edu)
+
+%%
 addpath(genpath('lib'));
 
 output_dir = fullfile(sub_output_folder, 'out');
