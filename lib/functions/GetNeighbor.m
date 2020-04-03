@@ -18,8 +18,6 @@ end
 %ind = sub2ind_MDTV(sz(2:4), x_sub,y_sub,z_sub);
 ind = sub2ind_MDTV(sz, x_sub,y_sub,z_sub);
 
-% [ right left up down rightup rightdown leftup leftdown upright upleft 
-
 
 
 

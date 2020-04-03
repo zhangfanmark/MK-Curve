@@ -39,15 +39,9 @@ end
 fprintf('\n');
 fprintf('Compute MK curves versus synthetic b0 values')
 
-if  ~isempty(strfind(sub_output_folder, 'Shanghai'))
-    syn_b0_range = 2:2:1500;
-    slice_id = 40;
-elseif  ~isempty(strfind(sub_output_folder, 'HCP'))
+if  ~isempty(strfind(sub_output_folder, 'HCP')) % Specific for HCP data
     syn_b0_range = 50:100:10000;
     slice_id = 3;
-elseif ~isempty(strfind(sub_output_folder, 'RepImpact'))
-    syn_b0_range = 50:50:10000;
-    slice_id = 40;
 else
     b0 = dwi(:, :, :, 1);
     mean_b0 = mean(b0(mask));
