@@ -50,6 +50,10 @@ else
     load(original_MK_file);
 end
 
+if ~exist(fullfile(output_dir, 'original_nii', 'original_E3.nii.gz'), 'file')
+    save_nii_parameters(mask_file, original_parameter_file, fullfile(output_dir, 'original_nii'), 'original');
+end
+
 %% MK-curve computation
 fprintf('\n');
 fprintf('Compute MK curves versus synthetic b0 values')
@@ -69,10 +73,12 @@ end
 mk_vs_syn_b0 = MK_versus_synthetic_b0(dwi, grad, mask, syn_b0_range, output_dir);
 
 %% Implausible Voxel Detection and correction
-th_range = [0, 0.1, 0.3, 0.5, 0.7, 0.9, 1];
+% th_range = [0, 0.1, 0.3, 0.5, 0.7, 0.9, 1];
+th_range = [0.5]; % threshold = 0.5 is suggested.
 for th = th_range
     output_th_dir = fullfile(output_dir, ['threshold_', num2str(th, '%0.2f')]);
-    if exist(output_th_dir) == 0
+    
+    if ~exist(output_th_dir, 'dir')
         mkdir(output_th_dir)
     end
     
@@ -106,6 +112,20 @@ for th = th_range
     else
         fprintf(' - Already done \n');
     end
+    
+    % output corrected parameter maps
+    if ~exist(fullfile(output_th_dir, 'corrected_nii', 'corrected_E3.nii.gz'), 'file')
+        save_nii_parameters(mask_file, fullfile(output_th_dir, 'fixed_parameters.mat'), fullfile(output_th_dir, 'corrected_nii'), 'corrected');
+    end
+    
+    % output corrected DWI
+    if ~exist(fullfile(output_th_dir, 'corrected_nii', 'corrected_dwi.nii.gz'), 'file')
+        save_nii_DWI(fullfile(output_th_dir, 'fixed_dwi'), nii_file,...
+                     fullfile(output_th_dir, 'corrected_nii', 'corrected_dwi.nii.gz'),...
+                     fullfile(output_th_dir, 'corrected_nii', 'corrected_bval'),...
+                     fullfile(output_th_dir, 'corrected_nii', 'corrected_bvec'));
+    end
+
 end
 
 %%

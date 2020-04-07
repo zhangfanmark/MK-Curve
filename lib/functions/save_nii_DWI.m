@@ -1,10 +1,15 @@
-function save_nii_DWI(input_dwi, input_bval, input_bvec, nii_file, output_dwi_nii, outout_bval_txt, outout_bvec_txt)
+function save_nii_DWI(mat_dwi_file, nii_dwi_file, output_nii_dwi, outout_txt_bval, outout_txt_bvec)
 
-nii_data = load_nii(nii_file);
-nii_data.img = input_dwi;
+mat_dwi = load(mat_dwi_file);
+
+nii_data = load_nii(nii_dwi_file);
+nii_data.img = mat_dwi.dwi_fixed;
 nii_data.hdr.dime.dim(5) = size(nii_data.img, 4);
 
-save_nii(nii_data, output_dwi_nii);
+bval = mat_dwi.grad(:, end);
+bvec = mat_dwi.grad(:, 1:3);
 
-save(outout_bval_txt, 'input_bval', '-ascii');
-save(outout_bvec_txt, 'input_bvec', '-ascii');
+save_nii(nii_data, output_nii_dwi);
+
+save(outout_txt_bval, 'bval', '-ascii');
+save(outout_txt_bvec, 'bvec', '-ascii');
