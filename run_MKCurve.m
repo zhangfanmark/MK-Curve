@@ -23,7 +23,7 @@ if ~exist(output_dir, 'dir')
 end
 
 %% Prepare DWI dataset
-fprintf('Load dwi dataset, compute mean b0 (if there are multiple b0 images) and fix non-negative signals \n')
+fprintf('Load dwi dataset, compute mean b0 (if there are multiple b0 images) and fix negative/nan signals \n')
 original_dwi_file = fullfile(output_dir, 'original_dwi.mat');
 original_mask_file = fullfile(output_dir, 'brain_mask.mat');
 if ~exist(original_mask_file, 'file')

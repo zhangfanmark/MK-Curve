@@ -4,7 +4,7 @@ function dwi = check_non_positive_signal(dwi, mask)
 for g = 1:ndwis
    g_img = dwi(:, :, :, g);
 
-   bad_signals_indices = find(g_img <= 0 & mask);
+   bad_signals_indices = union(find(isnan(g_img) & mask), find(g_img <= 0 & mask));
    
    if ~isempty(bad_signals_indices)
        fprintf('%d non-positive singals at direction %d. \n', length(bad_signals_indices), g);
