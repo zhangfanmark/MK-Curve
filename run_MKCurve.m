@@ -63,7 +63,7 @@ if  ~isempty(strfind(sub_output_folder, 'HCP')) % Specific for HCP data
     slice_id = 3;
 else
     b0 = dwi(:, :, :, 1);
-    mean_b0 = mean(b0(mask));
+    mean_b0 = nanmean(b0(mask));
     up_lim = round(mean_b0 * 2);
     down_lim = round(mean_b0 * 0.1);
     inv = round((up_lim - down_lim) / 200);
