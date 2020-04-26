@@ -1,4 +1,4 @@
-function [zero_MK_b0_image, max_MK_b0_image, voxels_abnormal_mask] = abnormal_voxel_detection(mk_vs_syn_b0, dwi, mask, syn_b0_range, th, output_dir)
+function [zero_MK_b0_image, max_MK_b0_image, max_MK_image, voxels_abnormal_mask] = abnormal_voxel_detection(mk_vs_syn_b0, dwi, mask, syn_b0_range, th, output_dir)
 
 %% Locate max_MK_b0 and zero_MK_b0
 
@@ -62,10 +62,11 @@ voxels_abnormal = voxels_orig_b0_closer_to_zero_MK_b0;
 % result
 zero_MK_b0_image = vectorize(zero_MK_b0, mask);
 max_MK_b0_image = vectorize(max_MK_b0, mask);
+max_MK_image = vectorize(max_MK, mask);
 
 tmp_vec = zeros([1, sum(mask(:) > 0)]); 
 tmp_vec(voxels_abnormal) = 1;
 voxels_abnormal_mask = vectorize(tmp_vec, mask);
 voxels_abnormal_mask = voxels_abnormal_mask > 0;
 
-save(fullfile(output_dir, 'abnormal_detection_output.mat'), 'zero_MK_b0', 'max_MK_b0', 'voxels_abnormal_mask');
+save(fullfile(output_dir, 'abnormal_detection_output.mat'), 'zero_MK_b0', 'max_MK_b0', 'max_MK', 'voxels_abnormal_mask');

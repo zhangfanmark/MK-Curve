@@ -89,10 +89,10 @@ for th = th_range
         
         % Implausible voxel detection
         fprintf(' - abnormal MK detection \n');
-        [zero_MK_b0_image, max_MK_b0_image, voxels_abnormal_mask] = abnormal_voxel_detection(mk_vs_syn_b0, dwi, mask, syn_b0_range, th, output_th_dir);
+        [zero_MK_b0_image, max_MK_b0_image, max_MK_image, voxels_abnormal_mask] = abnormal_voxel_detection(mk_vs_syn_b0, dwi, mask, syn_b0_range, th, output_th_dir);
         fprintf('   * total voxels (%d), abnormal voxels (%d)\n', sum(mask(:)>0), sum(voxels_abnormal_mask(:)>0));
-
-        save(fullfile(output_th_dir, 'zero_max_MK_images'), 'zero_MK_b0_image', 'max_MK_b0_image');
+        
+        save(fullfile(output_th_dir, 'zero_max_MK_images'), 'zero_MK_b0_image', 'max_MK_b0_image', 'max_MK_image');
         save(fullfile(output_th_dir, 'voxels_abnormal_mask'), 'voxels_abnormal_mask');
 
         % Implausible voxel correction
@@ -115,8 +115,9 @@ for th = th_range
     end
     
     % output corrected parameter maps
-    if ~exist(fullfile(output_th_dir, 'corrected_nii', 'corrected_E3.nii.gz'), 'file')
+    if ~exist(fullfile(output_th_dir, 'corrected_nii', 'MKCurve_ZeroMK-b0.nii.gz'), 'file')
         save_nii_parameters(mask_file, fullfile(output_th_dir, 'fixed_parameters.mat'), fullfile(output_th_dir, 'corrected_nii'), 'corrected');
+        save_nii_parameters(mask_file, fullfile(output_th_dir, 'zero_max_MK_images.mat'), fullfile(output_th_dir, 'corrected_nii'), 'zero_max_MK_images');
     end
     
     % output corrected DWI
