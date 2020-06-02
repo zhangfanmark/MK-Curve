@@ -61,6 +61,9 @@ fprintf('Compute MK curves versus synthetic b0 values')
 if  ~isempty(strfind(sub_output_folder, 'HCP')) % Specific for HCP data
     syn_b0_range = 50:100:10000;
     slice_id = 3;
+elseif  ~isempty(strfind(sub_output_folder, 'Ndyx'))
+    syn_b0_range = 2:4:1500;
+    slice_id = 40;
 else
     b0 = dwi(:, :, :, 1);
     mean_b0 = nanmean(b0(mask));
