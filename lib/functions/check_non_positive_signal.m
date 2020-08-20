@@ -14,6 +14,7 @@ for g = 1:ndwis
            nbr(2,2,2) = -1;
            nbr = setdiff(nbr(:),-1);   
            nbr(g_img(nbr)<=0) = [];
+           nbr(isnan(g_img(nbr))) = [];
            g_img(vox) = mean(g_img(nbr));
        end
    end
