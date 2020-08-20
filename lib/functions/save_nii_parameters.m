@@ -12,6 +12,10 @@ elseif strcmp(output_prefix, 'zero_max_MK_images')
     map_names = {'zero_MK_b0_image', 'max_MK_b0_image', 'max_MK_image'};
     out_names = {'ZeroMK-b0', 'MaxMK-b0', 'MaxMK'};
     output_prefix = 'MKCurve';
+elseif strcmp(output_prefix, 'abnormal_mask')
+    map_names = {'voxels_abnormal_mask'};
+    out_names = {'implausible_voxels'};
+    output_prefix = 'mask';
 end
 
 for m_idx = 1:length(map_names)

@@ -117,10 +117,11 @@ for th = th_range
         fprintf(' - Already done \n');
     end
     
-    % output corrected parameter maps
+    % output corrected parameter maps and implausibe voxel mask
     if ~exist(fullfile(output_th_dir, 'corrected_nii', 'MKCurve_ZeroMK-b0.nii.gz'), 'file')
         save_nii_parameters(mask_file, fullfile(output_th_dir, 'fixed_parameters.mat'), fullfile(output_th_dir, 'corrected_nii'), 'corrected');
         save_nii_parameters(mask_file, fullfile(output_th_dir, 'zero_max_MK_images.mat'), fullfile(output_th_dir, 'corrected_nii'), 'zero_max_MK_images');
+        save_nii_parameters(mask_file, fullfile(output_th_dir, 'voxels_abnormal_mask.mat'), fullfile(output_th_dir, 'corrected_nii'), 'abnormal_mask');
     end
     
     % output corrected DWI
