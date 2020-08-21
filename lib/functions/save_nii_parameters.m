@@ -31,7 +31,7 @@ for m_idx = 1:length(map_names)
     map = parameters.(map_name);
     
     % truncate the parameter values when there are extremely implausible values
-    if ~strfind(output_prefix, 'mask')
+    if isempty(strfind(output_prefix, 'mask'))
         map = truncate_parameters(map, out_names{m_idx});
     end
     
