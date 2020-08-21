@@ -40,9 +40,9 @@ fprintf('Compute original MK map using raw dwi')
 original_MK_file = fullfile(output_dir, 'original_MK.mat');
 original_parameter_file = fullfile(output_dir, 'original_parameters');
 if ~exist(original_MK_file, 'file')
-    [~, dt] = dki_fit(dwi, grad, mask, [0, 0, 0]);
+    [~, dt, fit_warning_mask] = dki_fit(dwi, grad, mask, [0, 0, 0]);
     mk = dki_mk_only(dt, mask);
-    save(original_MK_file, 'dt', 'mk');
+    save(original_MK_file, 'dt', 'mk', 'fit_warning_mask');
     
     [fa, md, rd, ad, fe, mk, rk, ak, e1, e2, e3] = dki_parameters(dt, mask);
     save(fullfile(output_dir, 'original_parameters'), 'fa', 'md', 'rd', 'ad', 'fe', 'mk',  'rk', 'ak', 'e1', 'e2', 'e3');
@@ -92,11 +92,11 @@ for th = th_range
         
         % Implausible voxel detection
         fprintf(' - abnormal MK detection \n');
-        [zero_MK_b0_image, max_MK_b0_image, max_MK_image, voxels_abnormal_mask] = abnormal_voxel_detection(mk_vs_syn_b0, dwi, mask, syn_b0_range, th, output_th_dir);
+        [zero_MK_b0_image, max_MK_b0_image, max_MK_image, voxels_abnormal_mask, voxels_unusual_curve_pattern_mask] = abnormal_voxel_detection(mk_vs_syn_b0, dwi, mask, syn_b0_range, th, output_th_dir);
         fprintf('   * total voxels (%d), abnormal voxels (%d)\n', sum(mask(:)>0), sum(voxels_abnormal_mask(:)>0));
         
         save(fullfile(output_th_dir, 'zero_max_MK_images'), 'zero_MK_b0_image', 'max_MK_b0_image', 'max_MK_image');
-        save(fullfile(output_th_dir, 'voxels_abnormal_mask'), 'voxels_abnormal_mask');
+        save(fullfile(output_th_dir, 'voxels_abnormal_mask'), 'voxels_abnormal_mask', 'voxels_unusual_curve_pattern_mask');
 
         % Implausible voxel correction
         fprintf(' - correction for the abnormal voxels \n');
@@ -113,6 +113,14 @@ for th = th_range
         [~, dt] = dki_fit(dwi_fixed, grad, mask, [0, 0, 0]);
         [fa, md, rd, ad, fe, mk, rk, ak, e1, e2, e3] = dki_parameters(dt, mask);
         save(fullfile(output_th_dir, 'fixed_parameters'), 'fa', 'md', 'rd', 'ad', 'fe', 'mk',  'rk', 'ak', 'e1', 'e2', 'e3');
+        
+        % find voxels still outside the plausible range;
+        problematic_mask = check_output_parameters(fullfile(output_th_dir, 'fixed_parameters'));
+        problematic_mask.voxels_unusual_curve_pattern_mask = voxels_unusual_curve_pattern_mask;
+        problematic_mask.fit_warning_mask = fit_warning_mask;
+        
+        save(fullfile(output_th_dir, 'problematic_mask'), 'problematic_mask');
+        
     else
         fprintf(' - Already done \n');
     end
@@ -121,7 +129,8 @@ for th = th_range
     if ~exist(fullfile(output_th_dir, 'corrected_nii', 'MKCurve_ZeroMK-b0.nii.gz'), 'file')
         save_nii_parameters(mask_file, fullfile(output_th_dir, 'fixed_parameters.mat'), fullfile(output_th_dir, 'corrected_nii'), 'corrected');
         save_nii_parameters(mask_file, fullfile(output_th_dir, 'zero_max_MK_images.mat'), fullfile(output_th_dir, 'corrected_nii'), 'zero_max_MK_images');
-        save_nii_parameters(mask_file, fullfile(output_th_dir, 'voxels_abnormal_mask.mat'), fullfile(output_th_dir, 'corrected_nii'), 'abnormal_mask');
+        save_nii_parameters(mask_file, fullfile(output_th_dir, 'voxels_abnormal_mask.mat'), fullfile(output_th_dir, 'masks'), 'abnormal_mask');
+        save_nii_parameters(mask_file, fullfile(output_th_dir, 'problematic_mask.mat'), fullfile(output_th_dir, 'masks'), 'problematic_mask');
     end
     
     % output corrected DWI

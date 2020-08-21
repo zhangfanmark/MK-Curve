@@ -4,7 +4,6 @@ if ~exist(ouput_folder, 'dir')
     mkdir(ouput_folder);
 end
 
-parameters = load(parameter_file);
 if strcmp(output_prefix, 'corrected') || strcmp(output_prefix, 'original')
     map_names = {'mk', 'rk', 'ak', 'fa', 'md', 'rd', 'ad', 'e1', 'e2', 'e3'};
     out_names = {'MK', 'RK', 'AK', 'FA', 'MD', 'RD', 'AD', 'E1', 'E2', 'E3'};
@@ -16,6 +15,15 @@ elseif strcmp(output_prefix, 'abnormal_mask')
     map_names = {'voxels_abnormal_mask'};
     out_names = {'implausible_voxels'};
     output_prefix = 'mask';
+elseif strcmp(output_prefix, 'problematic_mask')
+    map_names = {'mk', 'rk', 'ak', 'fa', 'md', 'rd', 'ad', 'e1', 'e2', 'e3', 'voxels_unusual_curve_pattern_mask', 'fit_warning_mask'};
+    out_names = {'MK', 'RK', 'AK', 'FA', 'MD', 'RD', 'AD', 'E1', 'E2', 'E3', 'voxels_unusual_MKC', 'fit_warning'};
+    output_prefix = 'mask_problematic_mask';
+end
+
+parameters = load(parameter_file);
+if isfield(parameters, 'problematic_mask')
+    parameters = parameters.problematic_mask;
 end
 
 for m_idx = 1:length(map_names)
@@ -23,7 +31,9 @@ for m_idx = 1:length(map_names)
     map = parameters.(map_name);
     
     % truncate the parameter values when there are extremely implausible values
-    map = truncate_parameters(map, out_names{m_idx});
+    if ~strfind(output_prefix, 'mask')
+        map = truncate_parameters(map, out_names{m_idx});
+    end
     
     output_file = fullfile(ouput_folder, [output_prefix, '_', out_names{m_idx}, '.nii.gz']);
 
