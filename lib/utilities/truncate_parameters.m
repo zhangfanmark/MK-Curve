@@ -15,14 +15,14 @@ elseif strcmp(map_name, 'md') || ...
        strcmp(map_name, 'e2') || ...
        strcmp(map_name, 'e3')
     
-   parameter_range = [-0.01, 0.02];
+   parameter_range = [-0.01, 0.01];
 
 elseif strcmp(map_name, 'mk') || ...
        strcmp(map_name, 'maxmk') || ...
        strcmp(map_name, 'ak') || ...
        strcmp(map_name, 'rk')
    
-   parameter_range = [-0.01, 10];
+   parameter_range = [-0.01, 6];
    
 else
     
