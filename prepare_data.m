@@ -1,9 +1,9 @@
 function [dwi, grad, mask] = prepare_data(nii_file, bval_file, bvec_file, mask_file, output_dir)
 
-data_nii = load_nii(nii_file);
+data_nii = load_untouch_nii(nii_file);
 bval = load(bval_file);
 bvec = load(bvec_file);
-mask_nii = load_nii(mask_file);
+mask_nii = load_untouch_nii(mask_file);
 
 if size(bval, 1) == 1
     bval = bval';

@@ -75,6 +75,8 @@ nvoxels = size(dt, 2);
 for i = 1:nvoxels
     DT = dt([1:3 2 4 5 3 5 6], i);
     DT = reshape(DT, [3 3]);
+    DT(isnan(DT)) = 0;
+
     [eigvec, eigval] = eigs(DT);
     eigval = diag(eigval);
     [eigval, idx] = sort(eigval, 'descend');

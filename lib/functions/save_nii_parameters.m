@@ -37,12 +37,12 @@ for m_idx = 1:length(map_names)
     
     output_file = fullfile(ouput_folder, [output_prefix, '_', out_names{m_idx}, '.nii.gz']);
 
-    data_nii = load_nii(nii_file);
+    data_nii = load_untouch_nii(nii_file);
     data_nii.img = single(map);
     data_nii.hdr.dime.datatype = 16;
     data_nii.hdr.dime.bitpix = 32;
     data_nii.original.hdr.dime.datatype = 16;
     data_nii.original.hdr.dime.bitpix = 32;
 
-    save_nii(data_nii, output_file);
+    save_untouch_nii(data_nii, output_file);
 end
